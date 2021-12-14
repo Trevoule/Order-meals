@@ -9,13 +9,35 @@ const defaultCartState = {
 
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
-    // concat instead of push does not immute existing array
-    const updatedItems = state.items.concat(action.item);
-    const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount;
-      return {
-          items: updatedItems,
-          totalAmount: updatedTotalAmount
+    const updatedTotalAmount =
+      state.totalAmount + action.item.price * action.item.amount;
+
+    // to check for multiple same items we add logic
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
+
+    const existingCartItem = state.items[existingCartItemIndex];
+    let updatedItems;
+
+    //   case if item were added before
+    if (existingCartItem) {
+      const updatedItem = {
+        ...existingCartItem,
+        amount: existingCartItem.amount + action.item.amount,
+      };
+
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemIndex] = updatedItem;
+    } else {
+      // concat instead of push does not immute existing array
+      updatedItems = state.items.concat(action.item);
     }
+
+    return {
+      items: updatedItems,
+      totalAmount: updatedTotalAmount,
+    };
   }
   return defaultCartState;
 };
