@@ -43,37 +43,14 @@ const Checkout = (props) => {
     reset: resetPostalCodeInput,
   } = useInput(isFiveChars);
 
-  //   const [formInputsValidity, setFormInputsValidity] = useState({
-  //     name: true,
-  //     street: true,
-  //     city: true,
-  //     postalCode: true,
-  //   });
-
-  //   const nameInputRef = useRef();
-  //   const streetInputRef = useRef();
-  //   const postalCodeInputRef = useRef();
-  //   const cityInputRef = useRef();
+  const formIsValid =
+    enteredNameIsValid &&
+    enteredStreetIsValid &&
+    enteredCityIsValid &&
+    enteredPostalCodeIsValid;
 
   const confirmHandler = (event) => {
     event.preventDefault();
-
-    // const enteredName = nameInputRef.current.value;
-    // const enteredStreet = streetInputRef.current.value;
-    // const enteredPostalCode = postalCodeInputRef.current.value;
-    // const enteredCity = cityInputRef.current.value;
-
-    // const enteredNameIsValid = !isEmpty(enteredName);
-    // const enteredStreetIsValid = !isEmpty(enteredStreet);
-    // const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
-    // const enteredCityIsValid = !isEmpty(enteredCity);
-
-    // setFormInputsValidity({
-    //   name: enteredNameIsValid,
-    //   street: enteredStreetIsValid,
-    //   city: enteredCityIsValid,
-    //   postalCode: enteredPostalCodeIsValid,
-    // });
 
     const formIsValid =
       enteredNameIsValid &&
@@ -91,10 +68,9 @@ const Checkout = (props) => {
       city: enteredCity,
       postalCode: enteredPostalCode,
     };
-    console.log(orderData);
 
-    // props.onConfirm(orderData);
-    // props.onCancel();
+    props.onConfirm(orderData);
+    props.onClear()
 
     resetNameInput();
     resetStreetInput();
@@ -102,15 +78,10 @@ const Checkout = (props) => {
     resetPostalCodeInput();
   };
 
-  //   const nameControlClasses = !formInputsValidity.name ? classes.invalid : "";
-  //   const streetControlClasses = !formInputsValidity.name ? classes.invalid : "";
-  //   const cityControlClasses = !formInputsValidity.city ? classes.invalid : "";
-  //   const postalCodeControlClasses = !formInputsValidity.postalCode ? classes.invalid: "";
-
   const nameControlClasses = nameInputHasError ? classes.invalid : "";
   const streetControlClasses = streetInputHasError ? classes.invalid : "";
-  const cityControlClasses = !cityInputHasError ? classes.invalid : "";
-  const postalCodeControlClasses = !postalCodeInputHasError
+  const cityControlClasses = cityInputHasError ? classes.invalid : "";
+  const postalCodeControlClasses = postalCodeInputHasError
     ? classes.invalid
     : "";
 
@@ -164,7 +135,7 @@ const Checkout = (props) => {
         <button type="button" onClick={props.onCancel}>
           Cancel
         </button>
-        <button className={classes.submit} type="submit">
+        <button disabled={!formIsValid ? true : false} className={classes.submit} type="submit">
           Confirm
         </button>
       </div>
