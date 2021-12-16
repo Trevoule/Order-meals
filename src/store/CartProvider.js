@@ -18,6 +18,7 @@ const cartReducer = (state, action) => {
     );
 
     const existingCartItem = state.items[existingCartItemIndex];
+
     let updatedItems;
 
     //   case if item were added before
@@ -31,6 +32,7 @@ const cartReducer = (state, action) => {
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
       // concat instead of push does not immute existing array
+      // creates new array
       updatedItems = state.items.concat(action.item);
     }
 
@@ -57,9 +59,10 @@ const cartReducer = (state, action) => {
       updatedItems = [...state.items];
       updatedItems[existingCartItemIndex] = updatedItem;
     }
+
     return {
       items: updatedItems,
-      totalAmount: updatedTotalAmount
+      totalAmount: updatedTotalAmount,
     };
   }
 
